@@ -6,10 +6,9 @@ ens.test = runModel(inst.Fsw = Fsw(d18O.coral = test$proxy.d18O,
                                    SST = test$instSST),
                     d18O = test$proxy.d18O,
                     instCov = cov(test$instSSS,test$instSST),
-                    nIt = 1000,
+                    nIt = 200,
                     instSST = test$instSST,instYears = test$instYears,
-                    years = test$years,instSSS = test$instSSS
+                    years = test$years,instSSS = test$instSSS)
 
-                    )
 }
 

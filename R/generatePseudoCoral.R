@@ -1,4 +1,4 @@
-pseudoCoral <- function(start.year = 1701, end.year = 2000,start.inst = 1950,SSS.coef = 0.60,SST.coef = -0.23,SSTvar = 2.5,SSSvar = .5,SST.SSS.corr = -.3,instSNR = 3,proxSNR = .5){
+pseudoCoral <- function(start.year = 1701, end.year = 2000,start.inst = 1950,SSS.coef = 0.60,SST.coef = -0.23,SSTvar = 1.5,SSSvar = .5,SST.SSS.corr = -.3,instSNR = 3,proxSNR = .5){
 
 #calc year data
 years = seq(start.year,end.year)

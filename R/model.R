@@ -5,20 +5,20 @@ runModel <- function(d18O,inst.Fsw, SST.coef = -0.23,
   nYears <- length(years)
 
   #initialize (based on Fsw)
-  #SSTvar = 2.5
-  SSTvar = var(instSST)
-  SSSvar = var(instSS) #this may need to be improved.
+  SSSvar = (inst.Fsw*var(d18O) - 2*SST.coef*instCov)/SSS.coef^2 #from Russon 2013 Fsw equation
+
+
 
   #instrumental variances
-  inst.SSTvar = SSTvar
-  inst.SSSvar = var(instSSS)
+  # inst.SSTvar = SSTvar
+  # inst.SSSvar = var(instSSS)
   inst.ind <- which(years %in% instYears)
 
   #start Gibbs sampler.
   #nIt = 200
   #sampleStep = 1
   #thresh = 1e-8 #.Machine$double.eps
-  allLike = matrix(NA,nrow = nIt*nYears)
+  allLike = matrix(NA,nrow = nIt*nYears,ncol = nEns)
   #nEns = 5
   ensSST = matrix(NA,ncol = nEns, nrow = nYears)
   ensSSS = ensSST
@@ -35,10 +35,10 @@ runModel <- function(d18O,inst.Fsw, SST.coef = -0.23,
     SSS = initSSS
 
     initLikelihood = Fsw.likelihood(Fsw(d18O.coral = d18O,SSS = initSSS,SST = initSST),obsFsw = inst.Fsw) *
-     sst.likelihood(initSST[inst.ind],instSST) *
-      cov.likelihood(cov(SST,SSS),instCov) *
-      var.likelihood(var(initSST[inst.ind]),inst.SSTvar) *
-      var.likelihood(var(initSSS[inst.ind]),inst.SSSvar)
+     #sst.likelihood(initSST[inst.ind],instSST) *
+      cov.likelihood(cov(SST,SSS),instCov)
+    #  var.likelihood(var(initSST[inst.ind]),inst.SSTvar) *
+    #  var.likelihood(var(initSSS[inst.ind]),inst.SSSvar)
 
     like = initLikelihood
 
@@ -65,10 +65,10 @@ runModel <- function(d18O,inst.Fsw, SST.coef = -0.23,
 
         #test the likelihood
         newLike = Fsw.likelihood(Fsw(d18O.coral = d18O,SSS = proposedSSS,SST = proposedSST),obsFsw = inst.Fsw) *
-          sst.likelihood(proposedSST[inst.ind],instSST)*
-          cov.likelihood(cov(proposedSST,proposedSSS),instCov)*
-          var.likelihood(var(proposedSST[inst.ind]),inst.SSTvar) *
-          var.likelihood(var(proposedSSS[inst.ind]),inst.SSSvar)
+         # sst.likelihood(proposedSST[inst.ind],instSST)*
+          cov.likelihood(cov(proposedSST,proposedSSS),instCov)
+        #  var.likelihood(var(proposedSST[inst.ind]),inst.SSTvar) *
+         # var.likelihood(var(proposedSSS[inst.ind]),inst.SSSvar)
 
 
         #accept the proposed change? #modified metropolis scheme here.
@@ -78,7 +78,7 @@ runModel <- function(d18O,inst.Fsw, SST.coef = -0.23,
           SSS = proposedSSS
           like = newLike
         }
-        allLike[(i-1)*length(SST)+y] = like
+        allLike[(i-1)*length(SST)+y,e] = like
 
         # if(i > 50000){
         #   if(mean(abs(diff(allLike[i-20000:i]))) < thresh){
@@ -97,6 +97,6 @@ runModel <- function(d18O,inst.Fsw, SST.coef = -0.23,
     ensSSS[,e] = SSS
 
   }
-  return(list(ensSST = ensSST, ensSSS = ensSSS))
+  return(list(ensSST = ensSST, ensSSS = ensSSS,allLike = allLike))
 }
 
