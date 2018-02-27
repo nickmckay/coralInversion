@@ -52,3 +52,20 @@ cov.likelihood = function(simCov,obsCov,unc = 1){
   like = dnorm(simCov,mean = obsCov, sd = unc)
   return(like)
 }
+
+#' Title
+#'
+#' @param propInstVar
+#' @param obsInstVar
+#' @param unc
+#'
+#' @return
+#' @export
+#'
+#' @examples
+var.likelihood <- function(propInstVar, obsInstVar, unc = 1){
+  #assume normal disribution for SSE for now
+  like = dnorm(propInstVar,mean = obsInstVar, sd = unc)
+  return(like)
+}
+
