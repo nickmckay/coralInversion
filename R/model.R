@@ -76,9 +76,9 @@ runModel <- function(d18O,inst.Fsw, SST.coef = -0.23,
 
         #test the likelihood
         newLike = Fsw.likelihood(allFsw[i,e],obsFsw = inst.Fsw) *
-          #sst.likelihood(proposedSST[inst.ind],instSST)*
+        # sst.likelihood(proposedSST[inst.ind],instSST)*
           cov.likelihood(allCov[i,e],instCov)
-        #  var.likelihood(var(proposedSST[inst.ind]),inst.SSTvar) *
+        # var.likelihood(var(proposedSST[inst.ind]),inst.SSTvar) *
         # var.likelihood(var(proposedSSS[inst.ind]),inst.SSSvar)
 
 
